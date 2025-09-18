@@ -1,23 +1,49 @@
 <?php
+require_once 'Controller.php';
 
-include "User.php";
 
-class View 
-{
-    public array $users = [];
+$users = [
+    [
+        'id' => 1,
+        'nome' => 'João Silva',
+        'email' => 'joao@email.com',
+        'senha' => password_hash('SenhaForte1', PASSWORD_BCRYPT)
+    ],
+];
 
-    public function addUser (User $user)
-    {
-        $this->users[] = $user;
+$controller = new Controller($users);
 
-    }
 
-}
 
-$view = new View();
-$user1 = new User("1", "Joao", "jlinguica@liguica.com", "1234");
-$view->addUser($user1);
+$testeCadastro = $controller->registerUser('Maria Oliveira', 'maria@email.com', 'Senha123');
+print_r($testeCadastro);
+echo "\n";
 
-print_r($view->users);
 
+$testeLogin = $controller->loginUser('joao@email.com', 'SenhaForte1');
+print_r($testeLogin);
+echo "\n";
+
+
+$testeSenhaFraca = $controller->registerUser('Pedro', 'pedro@email.com', '123');
+print_r($testeSenhaFraca);
+echo "\n";
+
+
+$testeEmailInvalido = $controller->registerUser('Ana', 'ana@@mail', 'Senha123');
+print_r($testeEmailInvalido);
+echo "\n";
+
+
+$emailDuplicado = $controller->registerUser('Pedro', 'joao@email.com', 'Senha123');
+print_r($emailDuplicado);
+echo "\n";
+
+
+$resetSenha = $controller->resetPassword(1, 'NovaSenhaSegura');
+print_r($resetSenha);
+echo "\n";
+
+
+print_r($controller->getAllUsers());
 ?>
