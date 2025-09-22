@@ -2,29 +2,25 @@
 
 class Validator
 {
-    public static function isValidEmail(string $email): bool
+
+    public function validarEmail($email): array
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['status' => false, 'msg_erro' => 'Email inválido.' . PHP_EOL];
+        }
+
+        return ['status' => true, 'msg_erro' => 'E-mail válido.' . PHP_EOL];
+
     }
 
-    public static function isStrongPassword(string $password): bool
+    public function validarSenha($password): array
     {
-        if (strlen($password)<8) {
-            return false;
+        if (strlen($password) && preg_match('/[0-9]/', $password) && preg_match('/[A-Z]/', $password)) {
+            return ['status' => true, 'msg_erro' => 'Senha válida' . PHP_EOL];
         }
 
-        if (!preg_match('/[0-9]/', $password))
-        {
-            return false;
-        }
-
-        if (!preg_match('/[A-Z]/', $password))
-        {
-            return false;
-        }
-        return true;
+        return ['status' => false, 'msg_erro' => 'Senha inválida' . PHP_EOL];
     }
+
+
 }
-
-
-?>
